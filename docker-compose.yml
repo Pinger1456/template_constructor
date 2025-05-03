@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    volumes:
+      # Локальный SQLite-файл
+      - ./backend/app.db:/app/app.db
+      # Локальная папка с .docx
+      - ./backend/templates_files:/app/templates_files:ro
+    expose:
+      - "8000"
+    environment:
+      - ALLOW_ORIGINS=*
+  
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  db_data:
+  templates:
